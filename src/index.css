@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* styles.css */
+.app {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #f8f8f8;
+  border-right: 1px solid #ddd;
+}
+
+.flex-grow {
+  flex: 1;
+  padding: 16px;
+}
