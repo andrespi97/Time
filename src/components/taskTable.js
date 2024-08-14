@@ -1,7 +1,7 @@
 import React from "react";
 
 // Componente para mostrar una fila de la tabla de tareas
-const TaskRow = ({ task }) => {
+const TaskRow = ({ task, onStatusChange }) => {
   // Asegúrate de que las fechas se conviertan a objetos Date si no lo son
   const startDate = new Date(task.startDate);
   const deadline = new Date(task.deadline);
@@ -9,11 +9,25 @@ const TaskRow = ({ task }) => {
   const dependencies = Array.isArray(task.dependencies)
     ? task.dependencies
     : [task.dependencies]; // Convertir a array si no es uno
-
+  // Cambia el estado al hacer clic
+  const handleStatusClick = () => {
+    const newStatus =
+      task.status === "not started"
+        ? "in progress"
+        : task.status === "in progress"
+        ? "completed"
+        : "not started";
+    onStatusChange(task.id, newStatus);
+  };
   return (
     <tr>
       <td className="p-4 border border-gray-300">{task.id}</td>
-      <td className="p-4 border border-gray-300">{task.status}</td>
+      <td
+        className="p-4 border border-gray-300 cursor-pointer"
+        onClick={handleStatusClick}
+      >
+        {task.status}
+      </td>
       <td className="p-4 border border-gray-300">{task.name}</td>
       <td className="p-4 border border-gray-300">{startDate.toDateString()}</td>
       <td className="p-4 border border-gray-300">{deadline.toDateString()}</td>
@@ -33,7 +47,7 @@ const TaskRow = ({ task }) => {
 };
 
 // Componente principal que renderiza la tabla de tareas
-const TaskTable = ({ tasks }) => {
+const TaskTable = ({ tasks, onStatusChange }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full table-auto border-collapse border border-gray-300">
@@ -55,7 +69,11 @@ const TaskTable = ({ tasks }) => {
         </thead>
         <tbody>
           {tasks.map((task) => (
-            <TaskRow key={task.id} task={task} />
+            <TaskRow
+              key={task.id}
+              task={task}
+              onStatusChange={onStatusChange}
+            />
           ))}
         </tbody>
       </table>
