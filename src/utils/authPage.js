@@ -7,7 +7,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-const AuthPage = () => {
+const AuthPage = (onAuth) => {
   const [isSignIn, setIsSignIn] = useState(true); // Controlar si se está en la página de inicio de sesión o registro
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,10 +26,11 @@ const AuthPage = () => {
           (userCredential) => {
             // Signed up
             const user = userCredential.user;
-            console.log("Usuario autenticado: " + user);
+
             // ...
           }
         );
+
         console.log("Usuario autenticado");
       } else {
         // Registrar
@@ -37,7 +38,7 @@ const AuthPage = () => {
           (userCredential) => {
             // Signed up
             const user = userCredential.user;
-            console.log(user);
+
             // ...
           }
         );
@@ -59,6 +60,7 @@ const AuthPage = () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
+
       console.log("Usuario autenticado con Google");
     } catch (error) {
       const errorMessage = error.message;

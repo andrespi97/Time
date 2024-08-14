@@ -1,8 +1,10 @@
+// components/ListSelector.js
 import React from "react";
 
 const ListSelector = ({ lists, selectedListIds, onSelectList }) => {
   return (
-    <div>
+    <div className="flex gap-4 p-4">
+      <h2>Lists</h2>
       {lists.map((list) => (
         <div key={list.id}>
           <input
