@@ -7,7 +7,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-const AuthPage = (onAuth) => {
+const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true); // Controlar si se está en la página de inicio de sesión o registro
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,27 +22,30 @@ const AuthPage = (onAuth) => {
     try {
       if (isSignIn) {
         // Iniciar sesión
-        await signInWithEmailAndPassword(auth, email, password).then(
-          (userCredential) => {
-            // Signed up
-            const user = userCredential.user;
-
-            // ...
-          }
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
         );
+        const user = userCredential.user;
 
-        console.log("Usuario autenticado");
+        // Accede al user ID (UID)
+        console.log("User ID:", user.uid);
+
+        alert("Usuario autenticado");
       } else {
         // Registrar
-        await createUserWithEmailAndPassword(auth, email, password).then(
-          (userCredential) => {
-            // Signed up
-            const user = userCredential.user;
-
-            // ...
-          }
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
         );
-        console.log("Usuario registrado");
+        const user = userCredential.user;
+
+        // Accede al user ID (UID)
+        console.log("User ID:", user.uid);
+
+        alert("Usuario registrado");
       }
 
       setEmail(""); // Limpiar campos
@@ -59,9 +62,13 @@ const AuthPage = (onAuth) => {
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
-      console.log("Usuario autenticado con Google");
+      // Accede al user ID (UID)
+      console.log("User ID:", user.uid);
+
+      alert("Usuario autenticado con Google");
     } catch (error) {
       const errorMessage = error.message;
       console.error("Error de autenticación con Google:", errorMessage);

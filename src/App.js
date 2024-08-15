@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "./utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import TaskTable from "./components/taskTable";
+
 import AuthPage from "./utils/authPage";
 import LogOut from "./utils/logout";
 import { useTasks } from "./utils/firestore/useTasks";
-import Header from "./components/Header";
-import ListSelector from "./components/listSelector";
+import AddCalendar from "./utils/firestore/addCalendar";
 
 const App = () => {
-  const [selectedListIds, setSelectedListIds] = useState([]);
-  const [filteredTasks, setFilteredTasks] = useState([]);
   const [user, setUser] = useState(null); // Estado para almacenar el usuario autenticado
   const { tareas, loading, error, lists } = useTasks();
-
+  const [filteredTasks, setFilteredTasks] = useState();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -21,22 +18,14 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
+  //actualiza tareas de la base de datos, si todo va bien
   useEffect(() => {
     if (!loading && tareas) {
       setFilteredTasks(tareas);
     }
   }, [tareas, loading]);
-
-  useEffect(() => {
-    if (tareas.length > 0) {
-      // Filtra las tareas según las listas seleccionadas
-      setFilteredTasks(
-        selectedListIds.length > 0
-          ? tareas.filter((task) => selectedListIds.includes(task.listId))
-          : tareas
-      );
-    }
-  }, [selectedListIds, tareas]);
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   const handleStatusChange = (taskId, newStatus) => {
     setFilteredTasks((prevTasks) =>
@@ -46,7 +35,7 @@ const App = () => {
     );
   };
 
-  const filterTasks = (criteria) => {
+  const filterTasks = (criterio) => {
     const now = new Date();
     let startOfWeek, endOfWeek, startOfNextWeek, endOfNextWeek;
 
@@ -62,7 +51,7 @@ const App = () => {
 
     let filtered;
 
-    switch (criteria) {
+    switch (criterio) {
       case "today":
         filtered = filteredTasks.filter((task) => {
           const deadline = new Date(task.deadline);
@@ -92,54 +81,23 @@ const App = () => {
       default:
         filtered = filteredTasks;
     }
-
     setFilteredTasks(filtered);
   };
-
-  const handleSelectList = (id) => {
-    setSelectedListIds((prev) => {
-      const newSelection = prev.includes(id)
-        ? prev.filter((listId) => listId !== id)
-        : [...prev, id];
-      return newSelection;
-    });
-  };
-
-  const handleSelectAll = () => {
-    setSelectedListIds(lists.map((list) => list.id));
-  };
-
-  const handleClearFilters = () => {
-    setFilteredTasks(tareas); // quita filtros de tiempo
-  };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const uid = user.uid;
 
   return (
-    <div>
+    <>
       {user ? (
         <>
-          <Header
-            onSelectAll={handleSelectAll}
-            onClearFilters={handleClearFilters}
-            onFilter={filterTasks}
-          />
-          <ListSelector
-            lists={lists}
-            selectedListIds={selectedListIds}
-            onSelectList={handleSelectList}
-          />
-          <TaskTable
-            tasks={filteredTasks}
-            onStatusChange={handleStatusChange}
-          />
+          <AddCalendar />
           <LogOut auth={auth} />
         </>
       ) : (
-        <AuthPage />
+        <>
+          <AuthPage />
+        </>
       )}
-    </div>
+    </>
   );
 };
 

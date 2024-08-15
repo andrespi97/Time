@@ -15,7 +15,7 @@ const LogOut = ({ auth }) => {
   };
   return (
     <>
-      <Button onPress={logOut}>Log Out</Button>;
+      <Button onPress={logOut}>Log Out</Button>
     </>
   );
 };
