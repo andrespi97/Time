@@ -5,6 +5,7 @@ import {
   doc,
   setDoc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db, auth } from "../firebase"; // Asegúrate de importar auth para obtener el UID
 import { useState } from "react";
@@ -18,7 +19,7 @@ const AddCalendar = () => {
   const addCalendar = async (event) => {
     event.preventDefault();
     try {
-      const docRef = await addDoc(collection(db, "calendario"), {
+      const docRef = await addDoc(collection(db, "calendars"), {
         nombre: nombre,
         color: color,
         uid: auth.currentUser?.uid,
@@ -28,9 +29,24 @@ const AddCalendar = () => {
       console.error("Error adding document: ", e);
     }
   };
+  const delCalendar = async (event) => {
+    event.preventDefault();
+    try {
+      const docRef = await await deleteDoc(doc(db, "calendars", "test"));
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+  const updCalendar = async (event) => {
+    event.preventDefault();
+    const washingtonRef = doc(db, "calendars", "r0BQ85XtLRqJgCvlvj9Z");
+    await updateDoc(washingtonRef, {
+      name: "trabajo",
+    });
+  };
   return (
     <div>
-      <form onSubmit={addCalendar}>
+      <form onSubmit={updCalendar}>
         <div>
           <label>
             Nombre:
