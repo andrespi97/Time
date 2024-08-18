@@ -6,12 +6,12 @@ import LogOut from "./utils/logout";
 import { useTasks } from "./utils/firestore/useTasks";
 import AddCalendar from "./utils/firestore/addCalendar";
 import { useCalendars } from "./utils/firestore/useCalendars";
+import Dashboard from "./components/dashboard";
 const App = () => {
   const [user, setUser] = useState(null); // Estado para almacenar el usuario autenticado
   const [filteredTasks, setFilteredTasks] = useState();
   const { tareas, loading, error, lists } = useTasks();
-  const { calendars } = useCalendars(user);
-  console.table(calendars);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -89,8 +89,7 @@ const App = () => {
     <>
       {user ? (
         <>
-          <AddCalendar />
-          <LogOut auth={auth} />
+          <Dashboard auth={auth} />
         </>
       ) : (
         <>

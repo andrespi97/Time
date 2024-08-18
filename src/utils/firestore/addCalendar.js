@@ -7,10 +7,10 @@ import {
   deleteDoc,
   updateDoc,
 } from "firebase/firestore";
-import { db, auth } from "../firebase"; // Asegúrate de importar auth para obtener el UID
+import { db } from "../firebase"; // Asegúrate de importar auth para obtener el UID
 import { useState } from "react";
 
-const AddCalendar = () => {
+const AddCalendar = ({ auth }) => {
   const [nombre, setNombre] = useState("");
   const [color, setColor] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
