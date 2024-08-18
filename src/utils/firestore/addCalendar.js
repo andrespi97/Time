@@ -6,6 +6,7 @@ import {
   setDoc,
   deleteDoc,
   updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase"; // Asegúrate de importar auth para obtener el UID
 import { useState } from "react";
@@ -23,6 +24,7 @@ const AddCalendar = ({ auth }) => {
         nombre: nombre,
         color: color,
         uid: auth.currentUser?.uid,
+        lastUpdate: serverTimestamp(),
       });
       console.log("Document written with ID: ", docRef.id);
       setIsModalOpen(false); // Cerrar el modal después de agregar
