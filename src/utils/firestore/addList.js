@@ -10,16 +10,16 @@ import {
 import { db, auth } from "../firebase"; // Asegúrate de importar auth para obtener el UID
 import { useState } from "react";
 
-const AddCalendar = () => {
+const AddList = () => {
   const [nombre, setNombre] = useState("");
   const [color, setColor] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   //añadir calendario
-  const addCalendar = async (event) => {
+  const addList = async (event) => {
     event.preventDefault();
     try {
-      const docRef = await addDoc(collection(db, "calendars"), {
+      const docRef = await addDoc(collection(db, "calendars", "lists"), {
         nombre: nombre,
         color: color,
         uid: auth.currentUser?.uid,
@@ -55,7 +55,7 @@ const AddCalendar = () => {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Añadir Nuevo Calendario</h2>
-            <form onSubmit={addCalendar}>
+            <form onSubmit={addList}>
               <div>
                 <label>
                   Nombre:
@@ -92,4 +92,4 @@ const AddCalendar = () => {
   );
 };
 
-export default AddCalendar;
+export default AddList;

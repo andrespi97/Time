@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "./utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-
 import AuthPage from "./utils/authPage";
 import LogOut from "./utils/logout";
 import { useTasks } from "./utils/firestore/useTasks";
 import AddCalendar from "./utils/firestore/addCalendar";
-
+import { useCalendars } from "./utils/firestore/useCalendars";
 const App = () => {
   const [user, setUser] = useState(null); // Estado para almacenar el usuario autenticado
-  const { tareas, loading, error, lists } = useTasks();
   const [filteredTasks, setFilteredTasks] = useState();
+  const { tareas, loading, error, lists } = useTasks();
+  const { calendars } = useCalendars(user);
+  console.table(calendars);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -83,7 +84,6 @@ const App = () => {
     }
     setFilteredTasks(filtered);
   };
-  const uid = user.uid;
 
   return (
     <>
