@@ -7,6 +7,8 @@ import { useTasks } from "./utils/firestore/useTasks";
 import AddCalendar from "./utils/firestore/addCalendar";
 import { useCalendars } from "./utils/firestore/useCalendars";
 import Dashboard from "./components/dashboard";
+import Dashboard2 from "./components/dashboard2";
+
 const App = () => {
   const [user, setUser] = useState(null); // Estado para almacenar el usuario autenticado
   const [filteredTasks, setFilteredTasks] = useState();
@@ -89,6 +91,7 @@ const App = () => {
     <>
       {user ? (
         <>
+          <Dashboard2 auth={auth} />
           <Dashboard auth={auth} />
         </>
       ) : (

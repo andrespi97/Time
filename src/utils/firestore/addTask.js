@@ -60,7 +60,12 @@ const AddTask = ({ auth, calendars }) => {
       console.error("Error adding document: ", e);
     }
   };
-
+  function findItemById(array, id) {
+    return array.find((item) => item.id === id);
+  }
+  const lists = selectedCalendar
+    ? findItemById(calendars, selectedCalendar).lists
+    : [];
   return (
     <div>
       <button onClick={() => setIsModalOpen(true)}>Añadir tarea</button>
@@ -96,8 +101,8 @@ const AddTask = ({ auth, calendars }) => {
                     required
                   >
                     <option value="">Selecciona una Lista</option>
-                    {selectedCalendar.lists ? (
-                      selectedCalendar.lists.map((list) => (
+                    {lists ? (
+                      lists.map((list) => (
                         <option key={list.id} value={list.id}>
                           {list.data.nombre}
                         </option>

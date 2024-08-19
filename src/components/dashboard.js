@@ -1,6 +1,6 @@
 import AddCalendar from "../utils/firestore/addCalendar";
 import LogOut from "../utils/logout";
-import { calendars, useCalendars } from "../utils/firestore/useCalendars";
+import { useCalendars } from "../utils/firestore/useCalendars";
 import AddList from "../utils/firestore/addList";
 import AddTask from "../utils/firestore/addTask";
 const Dashboard = ({ auth }) => {
