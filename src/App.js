@@ -92,7 +92,6 @@ const App = () => {
       {user ? (
         <>
           <Dashboard2 auth={auth} />
-          <Dashboard auth={auth} />
         </>
       ) : (
         <>
