@@ -7,6 +7,7 @@ import { writeBatch, doc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { ToggleButton } from "primereact/togglebutton";
 import Sidebar from "./sidebar";
+import TaskTable from "./taskTable";
 
 const Dashboard2 = ({ auth }) => {
   const { calendars } = useCalendars({ auth });
@@ -79,6 +80,7 @@ const Dashboard2 = ({ auth }) => {
     const id = setTimeout(() => {
       handleEditSave();
       commitBatch();
+      setLote(writeBatch(db));
     }, 5000);
     setTimeoutId(id);
   };
@@ -165,9 +167,10 @@ const Dashboard2 = ({ auth }) => {
   };
 
   return (
-    <div className="flex h-screen ">
-      {/* Sidebar */}
+    <div className="flex h-screen z-10">
       <Sidebar auth={auth} />
+      {/* Sidebar */}
+
       <div className="w-1/6 bg-gray-200 p-6 border-r">
         <h2 className=" font-bold mb-4">Lists</h2>
         <div className="space-y-2">
@@ -196,7 +199,7 @@ const Dashboard2 = ({ auth }) => {
           <AddList auth={auth} calendars={calendars} />
         </div>
       </div>
-
+      <TaskTable tasks={tasks} />
       {/* Main Content */}
       <div className="w-5/6 flex-1 p-6">
         <div className="flex justify-between items-center mb-4">

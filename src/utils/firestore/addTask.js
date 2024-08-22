@@ -2,6 +2,7 @@ import { collection, addDoc, doc, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState } from "react";
 import { Button } from "primereact/button";
+
 const AddTask = ({ auth, calendars, setTasks, tasks }) => {
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
@@ -86,6 +87,7 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
       console.error("Error adding document: ", e);
     }
   };
+
   function findItemById(array, id) {
     return array.find((item) => item.id === id);
   }
@@ -93,28 +95,31 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
   const lists = selectedCalendar
     ? findItemById(calendars, selectedCalendar)?.lists || []
     : [];
+
   return (
     <>
       <Button
         onClick={() => setIsModalOpen(true)}
-        icon=""
         rounded
         text
         severity="success"
-        aria-label="Add List"
+        aria-label="Add Task"
       >
         Add Task
       </Button>
 
       {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Añadir nueva tarea</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 translate-x-52">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+            <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
+              Añadir nueva tarea
+            </h2>
             <form onSubmit={addTask}>
-              <div>
-                <label>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Calendario:
                   <select
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={selectedCalendar}
                     onChange={(e) => setSelectedCalendar(e.target.value)}
                     required
@@ -128,16 +133,18 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
                   </select>
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Lista:
                   <select
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={selectedList}
                     onChange={(e) => setSelectedList(e.target.value)}
                     required
                   >
                     <option value="">Selecciona una Lista</option>
-                    {lists ? (
+                    {lists.length > 0 ? (
                       lists.map((list) => (
                         <option key={list.id} value={list.id}>
                           {list.data.nombre}
@@ -149,111 +156,139 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
                   </select>
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Nombre:
                   <input
                     type="text"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
                   />
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Estado:
                   <input
                     type="text"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                     required
                   />
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Fecha límite:
                   <input
                     type="date"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={deadline}
                     onChange={(e) => setDeadline(e.target.value)}
                   />
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Fecha planificada:
                   <input
                     type="date"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={plannedDate}
                     onChange={(e) => setPlannedDate(e.target.value)}
                   />
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Duración:
                   <input
                     type="text"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
                   />
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Repetición:
                   <input
                     type="text"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={reoccurence}
                     onChange={(e) => setReoccurence(e.target.value)}
                   />
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Prioridad:
                   <input
                     type="text"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={priority}
                     onChange={(e) => setPriority(e.target.value)}
                   />
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Fecha deseada:
                   <input
                     type="date"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={wantedDate}
                     onChange={(e) => setWantedDate(e.target.value)}
                   />
                 </label>
               </div>
-              <div>
-                <label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Categoría:
                   <input
                     type="text"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                   />
                 </label>
               </div>
-              <div>
-                <label>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Dependencias:
                   <input
                     type="text"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     value={dependencies}
                     onChange={(e) => setDependencies(e.target.value)}
                   />
                 </label>
               </div>
-              <div>
-                <button type="submit">Añadir</button>
-                <button type="button" onClick={() => setIsModalOpen(false)}>
+              <div className="mb-4">
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition"
+                >
+                  Añadir
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                  onClick={() => setIsModalOpen(false)}
+                >
                   Cancelar
                 </button>
               </div>
