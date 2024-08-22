@@ -1,7 +1,8 @@
-import { collection, addDoc, doc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState } from "react";
-
+import "primeicons/primeicons.css";
+import { Button } from "primereact/button";
 const AddList = ({ auth, calendars }) => {
   const [nombre, setNombre] = useState("");
   const [color, setColor] = useState("");
@@ -16,10 +17,13 @@ const AddList = ({ auth, calendars }) => {
     }
     try {
       const calendarDoc = doc(db, "calendars", selectedCalendar);
-      const docRef = await addDoc(collection(calendarDoc, "lists"), {
+      await addDoc(collection(calendarDoc, "lists"), {
         nombre: nombre,
         color: color,
         uid: auth.currentUser?.uid,
+      });
+      await updateDoc(calendarDoc, {
+        lastUpdate: new Date(),
       });
       setIsModalOpen(false);
       setNombre("");
@@ -30,9 +34,17 @@ const AddList = ({ auth, calendars }) => {
   };
 
   return (
-    <div>
-      <button onClick={() => setIsModalOpen(true)}>Añadir lista</button>
-
+    <>
+      <Button
+        onClick={() => setIsModalOpen(true)}
+        icon=""
+        rounded
+        text
+        severity="success"
+        aria-label="Add List"
+      >
+        Add List
+      </Button>
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal">
@@ -90,7 +102,7 @@ const AddList = ({ auth, calendars }) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -3,10 +3,10 @@ import { useCalendars } from "../utils/firestore/useCalendars";
 import AddList from "../utils/firestore/addList";
 import AddTask from "../utils/firestore/addTask";
 import LogOut from "../utils/logout";
-import { writeBatch, doc, updateDoc } from "firebase/firestore";
+import { writeBatch, doc } from "firebase/firestore";
 import { db } from "../utils/firebase";
-
 import { ToggleButton } from "primereact/togglebutton";
+import Sidebar from "./sidebar";
 
 const Dashboard2 = ({ auth }) => {
   const { calendars } = useCalendars({ auth });
@@ -78,6 +78,7 @@ const Dashboard2 = ({ auth }) => {
     // Set a timeout to auto-save after 5 seconds
     const id = setTimeout(() => {
       handleEditSave();
+      commitBatch();
     }, 5000);
     setTimeoutId(id);
   };
@@ -166,8 +167,9 @@ const Dashboard2 = ({ auth }) => {
   return (
     <div className="flex h-screen ">
       {/* Sidebar */}
+      <Sidebar auth={auth} />
       <div className="w-1/6 bg-gray-200 p-6 border-r">
-        <h2 className="text-2xl font-bold mb-4">Lists</h2>
+        <h2 className=" font-bold mb-4">Lists</h2>
         <div className="space-y-2">
           {calendars.map((calendar) =>
             calendar.lists.map((list) => (
@@ -288,7 +290,12 @@ const Dashboard2 = ({ auth }) => {
           </tbody>
         </table>
         <div className="mt-4">
-          <AddTask auth={auth} calendars={calendars} />
+          <AddTask
+            auth={auth}
+            calendars={calendars}
+            setTasks={setTasks}
+            tasks={tasks}
+          />
         </div>
       </div>
       <div className="p-6">

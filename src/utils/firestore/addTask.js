@@ -1,8 +1,8 @@
-import { collection, addDoc, doc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState } from "react";
-
-const AddTask = ({ auth, calendars }) => {
+import { Button } from "primereact/button";
+const AddTask = ({ auth, calendars, setTasks, tasks }) => {
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
   const [deadline, setDeadline] = useState("");
@@ -14,7 +14,9 @@ const AddTask = ({ auth, calendars }) => {
   const [category, setCategory] = useState("");
   const [dependencies, setDependencies] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCalendar, setSelectedCalendar] = useState("");
+  const [selectedCalendar, setSelectedCalendar] = useState(
+    calendars.length > 0 ? calendars[0].id : ""
+  );
   const [selectedList, setSelectedList] = useState("");
 
   const addTask = async (event) => {
@@ -23,6 +25,7 @@ const AddTask = ({ auth, calendars }) => {
       console.error("No calendar or list selected");
       return;
     }
+
     try {
       const listDoc = doc(
         db,
@@ -31,7 +34,8 @@ const AddTask = ({ auth, calendars }) => {
         "lists",
         selectedList
       );
-      await addDoc(collection(listDoc, "tasks"), {
+      const tarea = doc(collection(listDoc, "tasks"));
+      await setDoc(tarea, {
         status,
         name,
         deadline,
@@ -43,6 +47,28 @@ const AddTask = ({ auth, calendars }) => {
         category,
         dependencies,
         uid: auth.currentUser?.uid,
+      });
+      setTasks([
+        ...tasks,
+        {
+          id: tarea.id,
+          data: {
+            status,
+            name,
+            deadline,
+            plannedDate,
+            duration,
+            reoccurence,
+            priority,
+            wantedDate,
+            category,
+            dependencies,
+          },
+        },
+      ]);
+      const calDoc = doc(db, "calendars", selectedCalendar);
+      await updateDoc(calDoc, {
+        lastUpdate: new Date(),
       });
       setIsModalOpen(false);
       // Clear fields
@@ -63,12 +89,22 @@ const AddTask = ({ auth, calendars }) => {
   function findItemById(array, id) {
     return array.find((item) => item.id === id);
   }
+
   const lists = selectedCalendar
-    ? findItemById(calendars, selectedCalendar).lists
+    ? findItemById(calendars, selectedCalendar)?.lists || []
     : [];
   return (
-    <div>
-      <button onClick={() => setIsModalOpen(true)}>Añadir tarea</button>
+    <>
+      <Button
+        onClick={() => setIsModalOpen(true)}
+        icon=""
+        rounded
+        text
+        severity="success"
+        aria-label="Add List"
+      >
+        Add Task
+      </Button>
 
       {isModalOpen && (
         <div className="modal-overlay">
@@ -225,7 +261,7 @@ const AddTask = ({ auth, calendars }) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
