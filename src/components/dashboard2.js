@@ -167,39 +167,41 @@ const Dashboard2 = ({ auth }) => {
   };
 
   return (
-    <div className="flex h-screen z-10">
-      <Sidebar auth={auth} />
-      {/* Sidebar */}
+    <>
+      <div className="flex h-screen z-10">
+        <Sidebar auth={auth} tasks={tasks} setTasks={setTasks} />
+        {/* Sidebar */}
 
-      <div className="w-1/6 bg-gray-200 p-6 border-r">
-        <h2 className=" font-bold mb-4">Lists</h2>
-        <div className="space-y-2">
-          {calendars.map((calendar) =>
-            calendar.lists.map((list) => (
-              <div key={list.id} className="flex">
-                {/* este div es prime react */}
-                <div className="card flex justify-content-center">
-                  <ToggleButton
-                    onLabel={list.data.nombre}
-                    offLabel={list.data.nombre}
-                    onIcon="pi pi-check"
-                    offIcon="pi pi-times"
-                    checked={selectedLists.some(
-                      (selected) => selected.id === list.id
-                    )}
-                    onChange={() => handleCheckboxChange(list)}
-                    className="w-9rem truncate w-48"
-                  />
+        <div className="w-1/6 bg-gray-200 p-6 border-r">
+          <h2 className=" font-bold mb-4">Lists</h2>
+          <div className="space-y-2">
+            {calendars.map((calendar) =>
+              calendar.lists.map((list) => (
+                <div key={list.id} className="flex">
+                  {/* este div es prime react */}
+                  <div className="card flex justify-content-center">
+                    <ToggleButton
+                      onLabel={list.data.nombre}
+                      offLabel={list.data.nombre}
+                      onIcon="pi pi-check"
+                      offIcon="pi pi-times"
+                      checked={selectedLists.some(
+                        (selected) => selected.id === list.id
+                      )}
+                      onChange={() => handleCheckboxChange(list)}
+                      className="w-9rem truncate w-48"
+                    />
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
+              ))
+            )}
+          </div>
+          <div className="mt-4">
+            <AddList auth={auth} calendars={calendars} />
+          </div>
         </div>
-        <div className="mt-4">
-          <AddList auth={auth} calendars={calendars} />
-        </div>
+        <TaskTable tasks={tasks} />
       </div>
-      <TaskTable tasks={tasks} />
       {/* Main Content */}
       <div className="w-5/6 flex-1 p-6">
         <div className="flex justify-between items-center mb-4">
@@ -304,7 +306,7 @@ const Dashboard2 = ({ auth }) => {
       <div className="p-6">
         <LogOut auth={auth} />
       </div>
-    </div>
+    </>
   );
 };
 

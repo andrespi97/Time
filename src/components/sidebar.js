@@ -7,10 +7,10 @@ import { writeBatch, doc } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { ToggleButton } from "primereact/togglebutton";
 
-const Sidebar = ({ auth }) => {
+const Sidebar = ({ auth, tasks, setTasks }) => {
   const { calendars } = useCalendars({ auth });
   const [selectedLists, setSelectedLists] = useState([]);
-  const [tasks, setTasks] = useState([]);
+
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [editingCell, setEditingCell] = useState(null);

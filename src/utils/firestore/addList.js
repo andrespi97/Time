@@ -41,8 +41,8 @@ const AddList = ({ auth, calendars }) => {
       </Button>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative  transform translate-x-52">
+        <div className="fixed inset-0 z-50 flex items-center justify-center w-screen bg-gray-600 bg-opacity-20">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
             <h6 className="mb-4 text-gray-800">Añadir nueva lista</h6>
             <form onSubmit={addList}>
               <div className="mb-4">
@@ -58,7 +58,11 @@ const AddList = ({ auth, calendars }) => {
                       Selecciona un calendario
                     </option>
                     {calendars.map((calendar) => (
-                      <option key={calendar.id} value={calendar.id}>
+                      <option
+                        key={calendar.id}
+                        value={calendar.id}
+                        className="text-center"
+                      >
                         {calendar.data.nombre}
                       </option>
                     ))}
@@ -70,7 +74,7 @@ const AddList = ({ auth, calendars }) => {
                   Nombre:
                   <input
                     type="text"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-center"
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                     required
@@ -82,7 +86,7 @@ const AddList = ({ auth, calendars }) => {
                   Color:
                   <input
                     type="text"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-center"
                     value={color}
                     onChange={(e) => setColor(e.target.value)}
                     required

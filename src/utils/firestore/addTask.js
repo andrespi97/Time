@@ -109,8 +109,8 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
       </Button>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 translate-x-52">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center w-screen bg-gray-600 bg-opacity-20">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
               Añadir nueva tarea
             </h2>
@@ -280,13 +280,13 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
               <div className="mb-4">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition"
+                  className="px-4 py-2 bg-green-300 text-white rounded-md hover:bg-green-400 transition ease-out"
                 >
                   Añadir
                 </button>
                 <button
                   type="button"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition ease-out"
                   onClick={() => setIsModalOpen(false)}
                 >
                   Cancelar
