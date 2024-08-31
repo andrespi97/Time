@@ -6,13 +6,14 @@ import LogOut from "../utils/logout";
 
 import { ToggleButton } from "primereact/togglebutton";
 import AddCalendar from "../utils/firestore/addCalendar";
-
+import ViewMenu from "./viewMenu";
 const Sidebar = ({
   auth,
   tasks,
   setTasks,
   selectedLists,
   setSelectedLists,
+  setView,
 }) => {
   const { calendars } = useCalendars({ auth });
 
@@ -51,7 +52,7 @@ const Sidebar = ({
   };
 
   return (
-    <div className="">
+    <div className="w-auto">
       <button
         data-drawer-target="default-sidebar"
         data-drawer-toggle="default-sidebar"
@@ -77,11 +78,11 @@ const Sidebar = ({
 
       <aside
         id="default-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className="flex z-40 w-auto h-full transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-          <ul className="space-y-2 font-medium">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 h-screen">
+          <ul className="space-y-2 font-medium h-1/2">
             <li>
               <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                 <span
@@ -115,7 +116,17 @@ const Sidebar = ({
                 </li>
               ))
             )}
-
+            <li>
+              <a
+                href="#"
+                className="flex items-center justify-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <span className="flex-1 text-center whitespace-nowrap">
+                  <span className="pi pi-folder mr-3" />
+                  <AddCalendar auth={auth} />
+                </span>
+              </a>
+            </li>
             <li>
               <a
                 href="#"
@@ -143,6 +154,18 @@ const Sidebar = ({
                 </span>
               </a>
             </li>
+
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <span className="flex-1 text-center whitespace-nowrap">
+                  <span className="pi pi-sign-out mr-3" />
+                  <LogOut auth={auth} />
+                </span>
+              </a>
+            </li>
             <li>
               <a
                 href="#"
@@ -160,21 +183,8 @@ const Sidebar = ({
                 <span className="flex-1 ms-3 whitespace-nowrap">example</span>
               </a>
             </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <span className="flex-1 text-center whitespace-nowrap">
-                  <span className="pi pi-sign-out mr-3" />
-                  <LogOut auth={auth} />
-                </span>
-              </a>
-            </li>
-            <li>
-              <AddCalendar auth={auth} />
-            </li>
           </ul>
+          <ViewMenu setView={setView} />
         </div>
       </aside>
     </div>

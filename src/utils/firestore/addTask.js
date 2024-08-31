@@ -101,23 +101,24 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
 
   return (
     <>
-      <Button
+      <button
         onClick={() => setIsModalOpen(true)}
-        rounded
-        text
-        severity="success"
+        className="w-32 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
         aria-label="Add Task"
       >
         Add Task
-      </Button>
+      </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center w-screen bg-gray-600 bg-opacity-20">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6">
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
               Añadir nueva tarea
             </h2>
-            <form onSubmit={addTask}>
+            <form
+              onSubmit={addTask}
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Calendario:
@@ -269,6 +270,7 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
                   />
                 </label>
               </div>
+
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Dependencias:
@@ -280,7 +282,8 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
                   />
                 </label>
               </div>
-              <div className="mb-4">
+
+              <div className="col-span-2 flex justify-end space-x-4 mb-4">
                 <button
                   type="submit"
                   className="px-4 py-2 bg-green-300 text-white rounded-md hover:bg-green-400 transition ease-out"

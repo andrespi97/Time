@@ -1,5 +1,5 @@
 import { signOut } from "firebase/auth";
-import { Button } from "react-aria-components";
+
 const LogOut = ({ auth }) => {
   const logOut = async () => {
     signOut(auth)
@@ -15,7 +15,12 @@ const LogOut = ({ auth }) => {
   };
   return (
     <>
-      <Button onPress={logOut}>Log Out</Button>
+      <button
+        onClick={logOut}
+        className="w-32 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      >
+        Log Out
+      </button>
     </>
   );
 };

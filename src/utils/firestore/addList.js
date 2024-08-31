@@ -36,13 +36,18 @@ const AddList = ({ auth, calendars }) => {
 
   return (
     <>
-      <Button onClick={() => setIsModalOpen(true)} text aria-label="Add List">
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="w-32 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        text
+        aria-label="Add List"
+      >
         Add List
-      </Button>
+      </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center w-screen bg-gray-600 bg-opacity-20">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <h6 className="mb-4 text-gray-800">Añadir nueva lista</h6>
             <form onSubmit={addList}>
               <div className="mb-4">

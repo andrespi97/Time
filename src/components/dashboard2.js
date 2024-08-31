@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useCalendars } from "../utils/firestore/useCalendars";
 import { db } from "../utils/firebase";
 import Todolist from "./todolist";
+import ViewMenu from "./viewMenu";
 
 const Dashboard2 = ({ auth }) => {
   const { calendars } = useCalendars({ auth });
   const [selectedLists, setSelectedLists] = useState([]);
   const [tasks, setTasks] = useState([]);
-
+  const [view, setView] = useState("tasktable");
   useEffect(() => {
     const fetchTasks = () => {
       try {
@@ -51,7 +52,7 @@ const Dashboard2 = ({ auth }) => {
   };
   return (
     <>
-      <div className="flex h-screen z-10">
+      <div className="w-screen h-screen z-10 flex">
         <Todolist
           auth={auth}
           tasks={tasks}
@@ -61,6 +62,8 @@ const Dashboard2 = ({ auth }) => {
           db={db}
           listOfTask={listOfTask}
           calendarOfList={calendarOfList}
+          setView={setView}
+          view={view}
         />
       </div>
     </>
