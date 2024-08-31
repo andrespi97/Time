@@ -7,6 +7,9 @@ module.exports = {
       backgroundImage: {
         libreta: "url('/img/libreta.jpg')",
       },
+      maxWidth: {
+        custom: "calc(100% - 16rem)",
+      },
     },
   },
   plugins: [],

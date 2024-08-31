@@ -2,12 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Importar la fuente Lemon si es necesario */
-@import url("https://fonts.googleapis.com/css2?family=Lemon&display=swap");
-
 /* Estilos base para el body */
 body {
-  font-family: "Arial Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 16px; /* Base font size */
   line-height: 1.5; /* Ajusta según sea necesario */

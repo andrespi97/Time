@@ -1,4 +1,4 @@
-import { collection, addDoc, doc, updateDoc, setDoc } from "firebase/firestore";
+import { collection, doc, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState } from "react";
 import { Button } from "primereact/button";

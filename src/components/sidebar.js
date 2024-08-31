@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useCalendars } from "../utils/firestore/useCalendars";
 import AddList from "../utils/firestore/addList";
 import AddTask from "../utils/firestore/addTask";
 import LogOut from "../utils/logout";
-import { writeBatch, doc } from "firebase/firestore";
-import { db } from "../utils/firebase";
+
 import { ToggleButton } from "primereact/togglebutton";
 
-const Sidebar = ({ auth, tasks, setTasks }) => {
+const Sidebar = ({
+  auth,
+  tasks,
+  setTasks,
+  selectedLists,
+  setSelectedLists,
+}) => {
   const { calendars } = useCalendars({ auth });
-  const [selectedLists, setSelectedLists] = useState([]);
 
-  const [sortColumn, setSortColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState("asc");
-  const [editingCell, setEditingCell] = useState(null);
-  const [editValue, setEditValue] = useState("");
-  const [lote, setLote] = useState(writeBatch(db));
-  const [timeoutId, setTimeoutId] = useState(null);
   useEffect(() => {
     const fetchTasks = () => {
       try {
@@ -38,7 +36,7 @@ const Sidebar = ({ auth, tasks, setTasks }) => {
     };
 
     fetchTasks();
-  }, [selectedLists]);
+  }, [selectedLists, setTasks]);
 
   const handleCheckboxChange = (list) => {
     setSelectedLists((prev) => {
@@ -51,119 +49,8 @@ const Sidebar = ({ auth, tasks, setTasks }) => {
     });
   };
 
-  const handleSort = (column) => {
-    if (sortColumn === column) {
-      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-    } else {
-      setSortColumn(column);
-      setSortDirection("asc");
-    }
-
-    const sortedTasks = [...tasks].sort((a, b) => {
-      if (a[column] < b[column]) return sortDirection === "asc" ? -1 : 1;
-      if (a[column] > b[column]) return sortDirection === "asc" ? 1 : -1;
-      return 0;
-    });
-
-    setTasks(sortedTasks);
-  };
-
-  const handleCellEdit = (taskId, column, value) => {
-    setEditingCell({ taskId, column });
-    setEditValue(value);
-    // Clear existing timeout if any
-    if (timeoutId) clearTimeout(timeoutId);
-
-    // Set a timeout to auto-save after 5 seconds
-    const id = setTimeout(() => {
-      handleEditSave();
-      commitBatch();
-    }, 5000);
-    setTimeoutId(id);
-  };
-  const listOfTask = (taskId, selectedLists) => {
-    for (const list of selectedLists) {
-      const foundTask = list.tasks.find((task) => task.id === taskId);
-      if (foundTask) {
-        return list.id; // Devuelve el ID de la lista que contiene la tarea
-      }
-    }
-    return null; // Si no se encuentra la tarea, devuelve null
-  };
-  const calendarOfList = (listId) => {
-    for (const calendar of calendars) {
-      const foundCalendar = calendar.lists.find((list) => list.id === listId);
-      if (foundCalendar) {
-        return calendar.id; // Devuelve el ID de la lista que contiene la tarea
-      }
-    }
-    return null; // Si no se encuentra la tarea, devuelve null
-  };
-  const handleEditSave = async () => {
-    const batch = lote;
-    if (!editingCell) return;
-    const lista = listOfTask(editingCell.taskId, selectedLists);
-    const calendario = calendarOfList(lista);
-    if (calendario && lista) {
-      const guardarTask = doc(
-        db,
-        "calendars",
-        calendario,
-        "lists",
-        lista,
-        "tasks",
-        editingCell.taskId
-      );
-      try {
-        // Actualizar el valor en Firestore
-        console.log(batch);
-
-        batch.update(guardarTask, { [editingCell.column]: editValue });
-        console.log(batch);
-        setLote(batch);
-        // Actualizar el valor en el estado local
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.id === editingCell.taskId
-              ? {
-                  ...task,
-                  data: {
-                    ...task.data,
-                    [editingCell.column]: editValue,
-                  },
-                }
-              : task
-          )
-        );
-      } catch (error) {
-        console.error("Error updating document: ", error);
-      }
-    }
-
-    setEditingCell(null);
-    setEditValue("");
-  };
-
-  const commitBatch = async () => {
-    const batch = lote;
-    await batch
-      .commit()
-      .then(() => {
-        console.log("Todos los documentos se actualizaron correctamente.");
-      })
-      .catch((error) => {
-        console.error("Error al actualizar los documentos: ", error);
-      });
-    setLote(writeBatch(db));
-  };
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleEditSave();
-    }
-  };
   return (
-    <>
+    <div className="">
       <button
         data-drawer-target="default-sidebar"
         data-drawer-toggle="default-sidebar"
@@ -180,8 +67,8 @@ const Sidebar = ({ auth, tasks, setTasks }) => {
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            clip-rule="evenodd"
-            fill-rule="evenodd"
+            clipRule="evenodd"
+            fillRule="evenodd"
             d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
           ></path>
         </svg>
@@ -201,7 +88,7 @@ const Sidebar = ({ auth, tasks, setTasks }) => {
                   style={{ fontSize: "2.488rem" }}
                 ></span>
                 {/* listas */}
-                <span class="inline-flex items-center justify-center px-2 ms-3  text-gray-800  rounded-full  dark:text-gray-300">
+                <span className="inline-flex items-center justify-center px-2 ms-3  text-gray-800  rounded-full  dark:text-gray-300">
                   <h2 className="mb-1">Lists</h2>
                 </span>
               </a>
@@ -286,7 +173,7 @@ const Sidebar = ({ auth, tasks, setTasks }) => {
           </ul>
         </div>
       </aside>
-    </>
+    </div>
   );
 };
 
