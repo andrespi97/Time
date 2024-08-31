@@ -5,7 +5,13 @@ import { db } from "../firebase";
 export const useCalendars = ({ auth }) => {
   const [calendars, setCalendars] = useState([]);
   const userUid = auth ? auth.currentUser?.uid : "noUserDetected";
-
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Los meses son 0-indexados
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
   useEffect(() => {
     const calendarQuery = query(
       collection(db, "calendars"),
@@ -46,11 +52,24 @@ export const useCalendars = ({ auth }) => {
                 "tasks"
               );
 
+              // const unsubscribeTasks = onSnapshot(taskQuery, (taskSnapshot) => {
+              //   const updatedTasks = taskSnapshot.docs.map((taskDoc) => ({
+              //     id: taskDoc.id,
+              //     data: taskDoc.data(),
+              //   }));
               const unsubscribeTasks = onSnapshot(taskQuery, (taskSnapshot) => {
-                const updatedTasks = taskSnapshot.docs.map((taskDoc) => ({
-                  id: taskDoc.id,
-                  data: taskDoc.data(),
-                }));
+                const updatedTasks = taskSnapshot.docs.map((taskDoc) => {
+                  const data = taskDoc.data();
+                  return {
+                    id: taskDoc.id,
+                    data: {
+                      ...data,
+                      deadline: formatDate(data.deadline),
+                      plannedDate: formatDate(data.plannedDate),
+                      wantedDate: formatDate(data.wantedDate),
+                    },
+                  };
+                });
 
                 listData.tasks = updatedTasks;
                 setCalendars((prevCalendars) => {
