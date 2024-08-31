@@ -6,6 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { Tag } from "primereact/tag";
 import { doc, updateDoc } from "firebase/firestore";
 import debounce from "lodash/debounce";
+import "react-datepicker/dist/react-datepicker.css";
 
 const TaskTable = ({
   initialTasks,
@@ -34,12 +35,21 @@ const TaskTable = ({
     () => [
       { field: "status", header: "Status" },
       { field: "name", header: "Name" },
-      { field: "deadline", header: "Deadline" },
-      { field: "plannedDate", header: "Planned Date" },
+      {
+        field: "deadline",
+        header: "Deadline",
+      },
+      {
+        field: "plannedDate",
+        header: "Planned Date",
+      },
+      {
+        field: "wantedDate",
+        header: "Wanted Date",
+      },
       { field: "duration", header: "Duration" },
       { field: "reoccurence", header: "Reoccurence" },
       { field: "priority", header: "Priority" },
-      { field: "wantedDate", header: "Wanted Date" },
       { field: "category", header: "Category" },
       { field: "dependencies", header: "Dependencies" },
       { field: "uid", header: "UID" },
@@ -85,6 +95,7 @@ const TaskTable = ({
 
   const onCellEditComplete = (e) => {
     let { rowData, newValue, field } = e;
+    console.table(rowData);
 
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
@@ -96,10 +107,19 @@ const TaskTable = ({
   };
 
   const cellEditor = (options) => {
-    if (options.field === "status") {
-      return statusEditor(options);
+    switch (options.field) {
+      case "status":
+        return statusEditor(options);
+
+      case "priority":
+        return priorityEditor(options);
+      case "deadline":
+      case "wantedDate":
+      case "plannedDate":
+        return dateEditor(options);
+      default:
+        return textEditor(options);
     }
-    return textEditor(options);
   };
 
   const textEditor = (options) => (
@@ -110,6 +130,22 @@ const TaskTable = ({
     />
   );
 
+  const priorityEditor = (options) => {
+    const priorityOptions = [
+      { label: "Have to do", value: "Have to do" },
+      { label: "Should do", value: "Should do" },
+      { label: "Want to do", value: "Want to do" },
+    ];
+
+    return (
+      <Dropdown
+        value={options.value}
+        options={priorityOptions}
+        onChange={(e) => options.editorCallback(e.value)}
+        placeholder="Select Priority"
+      />
+    );
+  };
   const statusEditor = (options) => (
     <Dropdown
       value={options.value}
@@ -119,6 +155,13 @@ const TaskTable = ({
       itemTemplate={(option) => (
         <Tag value={option} severity={getSeverity(option)}></Tag>
       )}
+    />
+  );
+  const dateEditor = (options) => (
+    <InputText
+      type="text"
+      value={options.value}
+      onChange={(e) => options.editorCallback(e.target.value)}
     />
   );
 
@@ -135,6 +178,17 @@ const TaskTable = ({
     }
   };
 
+  const body = (col) => {
+    switch (col.field) {
+      case "status":
+        return (rowData) => (
+          <Tag value={rowData.status} severity={getSeverity(rowData.status)} />
+        );
+
+      default:
+        return undefined;
+    }
+  };
   return (
     <div className="fixed top-0 right-0 w-full max-w-custom mx-auto">
       <DataTable value={tasks} editMode="cell" className="p-datatable-sm">
@@ -145,18 +199,7 @@ const TaskTable = ({
             header={col.header}
             editor={(options) => cellEditor(options)}
             onCellEditComplete={onCellEditComplete}
-            body={
-              col.field === "status"
-                ? (rowData) => {
-                    return (
-                      <Tag
-                        value={rowData.status}
-                        severity={getSeverity(rowData.status)}
-                      />
-                    );
-                  }
-                : undefined
-            }
+            body={body(col)}
           />
         ))}
       </DataTable>

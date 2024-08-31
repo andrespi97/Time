@@ -36,15 +36,18 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
         selectedList
       );
       const tarea = doc(collection(listDoc, "tasks"));
+      const deadlineTimestamp = new Date(deadline).getTime();
+      const plannedDateTimestamp = new Date(plannedDate).getTime();
+      const wantedDateTimestamp = new Date(wantedDate).getTime();
       await setDoc(tarea, {
         status,
         name,
-        deadline,
-        plannedDate,
+        deadline: deadlineTimestamp,
+        plannedDate: plannedDateTimestamp,
         duration,
         reoccurence,
         priority,
-        wantedDate,
+        wantedDate: wantedDateTimestamp,
         category,
         dependencies,
         uid: auth.currentUser?.uid,
@@ -56,12 +59,12 @@ const AddTask = ({ auth, calendars, setTasks, tasks }) => {
           data: {
             status,
             name,
-            deadline,
-            plannedDate,
+            deadline: deadlineTimestamp,
+            plannedDate: plannedDateTimestamp,
             duration,
             reoccurence,
             priority,
-            wantedDate,
+            wantedDate: wantedDateTimestamp,
             category,
             dependencies,
           },

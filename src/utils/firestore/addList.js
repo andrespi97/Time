@@ -8,7 +8,7 @@ const AddList = ({ auth, calendars }) => {
   const [nombre, setNombre] = useState("");
   const [color, setColor] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCalendar, setSelectedCalendar] = useState();
+  const [selectedCalendar, setSelectedCalendar] = useState(calendars);
 
   const addList = async (event) => {
     event.preventDefault();

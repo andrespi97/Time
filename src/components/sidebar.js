@@ -5,6 +5,7 @@ import AddTask from "../utils/firestore/addTask";
 import LogOut from "../utils/logout";
 
 import { ToggleButton } from "primereact/togglebutton";
+import AddCalendar from "../utils/firestore/addCalendar";
 
 const Sidebar = ({
   auth,
@@ -169,6 +170,9 @@ const Sidebar = ({
                   <LogOut auth={auth} />
                 </span>
               </a>
+            </li>
+            <li>
+              <AddCalendar auth={auth} />
             </li>
           </ul>
         </div>
