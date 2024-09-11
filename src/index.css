@@ -4,7 +4,8 @@
 
 /* Estilos base para el body */
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-weight: 400;
   font-size: 16px; /* Base font size */
   line-height: 1.5; /* Ajusta según sea necesario */
